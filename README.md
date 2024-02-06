@@ -1,6 +1,6 @@
 # goqueue
 
-A simple implementation of queues using channels and stacks using slices.
+A simple implementation of queues and stacks using slices
 
 ## Usage
 

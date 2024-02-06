@@ -6,14 +6,14 @@ import (
 
 // Queue data structure
 type Queue struct {
-	items chan interface{}
+	items []interface{}
 	mutex sync.Mutex
 }
 
 // Instantiate a new queue
 func NewQueue() *Queue {
 	return &Queue{
-		items: make(chan interface{}),
+		items: make([]interface{}, 0),
 	}
 }
 
@@ -21,14 +21,21 @@ func NewQueue() *Queue {
 func (q *Queue) Enqueue(item interface{}) {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
-	q.items <- item
+	q.items = append(q.items, item)
 }
 
 // Remove and return the element at the front of the queue
 func (q *Queue) Dequeue() interface{} {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
-	return <- q.items
+
+	if len(q.items) == 0 {
+		return nil
+	}
+
+	item := q.items[0]
+	q.items = q.items[1:]
+	return item
 }
 
 // Return false if items are in the queue
